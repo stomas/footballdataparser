@@ -3,7 +3,7 @@
     "description": "Package to parse footballdata from football-data.co.uk",
     "type": "project",
     "require": {
-
+        "league/csv":"^8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
