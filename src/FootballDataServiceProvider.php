@@ -36,5 +36,8 @@ class FootballDataServiceProvider extends ServiceProvider
 
         //Views
         $this->loadViewsFrom(__DIR__ . '/Views', 'footballdata');
+
+        //Migrations
+        $this->loadMigrationsFrom(__DIR__.'/Migrations');
     }
 }

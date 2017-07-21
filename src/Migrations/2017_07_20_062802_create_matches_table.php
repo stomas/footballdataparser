@@ -14,20 +14,20 @@
          */
         public function up ()
         {
-
             Schema::create (
                 'matches', function (Blueprint $table) {
                     $table->increments ('id');
                     $table->string('Div')->comment('League Division');
-                    $table->date('Data')->comment('Match date');
-                    $table->text('HomeTeam')->comment('Home team');
-                    $table->text('AwayTeam')->comment('Away team');
+                    $table->date('Date')->comment('Match date');
+                    $table->string('HomeTeam')->comment('Home team');
+                    $table->string('AwayTeam')->comment('Away team');
                     $table->integer('FTHG')->comment('Full Time Home Team Goals');
                     $table->integer('FTAG')->comment('Full Time Away Team Goals');
-                    $table->integer('FTR')->comment('Full Time Result (H=Home Win, D=Draw, A=Away Win');
+                    $table->string('FTR')->comment('Full Time Result (H=Home Win, D=Draw, A=Away Win');
                     $table->integer('HTHG')->comment('Half Time Home Team Goals');
                     $table->integer('HTAG')->comment('Half Time Away Team Goals');
-                    $table->integer('HTR')->comment('Half Time Result (H=Home Win, D=Draw, A=Away Win');
+                    $table->string('HTR')->comment('Half Time Result (H=Home Win, D=Draw, A=Away Win');
+                    $table->unique(['Date', 'HomeTeam', 'AwayTeam']);
                     $table->timestamps ();
                 }
             );
