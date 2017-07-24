@@ -2,29 +2,42 @@
 
 namespace Stomas\Footballdataparser\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use League\Csv\Reader;
 use Stomas\Footballdataparser\Models\Match;
 
+/**
+ * Class FootballDataController
+ *
+ * @package Stomas\Footballdataparser\Controllers
+ */
 class FootballDataController extends Controller
 {
-    public function form(){
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function form()
+    {
         return view('footballdata::form');
     }
 
-    public function store(Request $request){
-        if($request->file('csvfile')){
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+
+        if($request->file('csvfile')) {
             //Getting file
             $request->csvfile->storeAs('csv/', $request->csvfile->getClientOriginalName());
-            $csvFile = Storage::get('csv/'.$request->csvfile->getClientOriginalName());
-            $csv = Reader::createFromString($csvFile);
+            $csvFile = Storage::get('csv/' . $request->csvfile->getClientOriginalName());
 
-            //Writing to model
-            $header = $csv->fetchOne();
-            $matches = $csv->setOffset(1)->fetchAll();
-
+<<<<<<< HEAD
             foreach($matches as $match){
 
 // Execute the query
@@ -32,8 +45,13 @@ class FootballDataController extends Controller
                 (new Match())->getMatchWithCSVRow($header, $match);
 
             }
+=======
+            (new Match())->parseCSV($csvFile);
+>>>>>>> a41647427a528a2590de050aa6a326d1a9a0367d
         }
 
-        return back()->with('message', 'Thank you, your file was uploaded');
+        Session::flash('message', 'Thank you, your file was uploaded');
+
+        return redirect('/footballdata');
     }
 }
