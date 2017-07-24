@@ -31,6 +31,13 @@
                     $table->timestamps ();
                 }
             );
+
+            Schema::table('matches', function (Blueprint $table) {
+                $table->float('HomeTeamELO')->nullable();
+                $table->float('AwayTeamELO')->nullable();
+            });
+
+
         }
 
         /**

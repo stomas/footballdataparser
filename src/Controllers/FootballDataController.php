@@ -26,7 +26,11 @@ class FootballDataController extends Controller
             $matches = $csv->setOffset(1)->fetchAll();
 
             foreach($matches as $match){
+
+// Execute the query
+
                 (new Match())->getMatchWithCSVRow($header, $match);
+
             }
         }
 

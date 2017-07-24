@@ -26,6 +26,7 @@ class Match extends Model
     }
 
     function getMatchWithCSVRow(array $csvHeaderArray, array $csvRowArray){
+
         $this->addMatchFromCSVRow($csvHeaderArray, $csvRowArray);
 
         $this->addStatisticsFromCSVRow($csvHeaderArray, $csvRowArray);
@@ -36,11 +37,14 @@ class Match extends Model
     }
 
     function addMatchFromCSVRow(array $csvHeaderArray, array $csvRowArray){
+
+
         $this->addCSVToModelAttributes($csvHeaderArray, $csvRowArray);
 
         //Guards to not override matche
         if(!Match::where(['Date' => $this->Date, 'HomeTeam' => $this->HomeTeam, 'AwayTeam' => $this->AwayTeam])->first()){
             $this->save();
+
             return $this;
         }
 
