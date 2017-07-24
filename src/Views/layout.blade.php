@@ -15,8 +15,13 @@
     </head>
     <body>
         <div class="container">
+
             @include('footballdata::components.header')
+
+
             @yield('content')
+
+
             @include('footballdata::components.footer')
         </div>
     </body>

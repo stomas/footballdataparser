@@ -33,7 +33,6 @@ class FootballDataServiceProvider extends ServiceProvider
         //Controller
         $this->app->make('Stomas\Footballdataparser\Controllers\FootballDataController');
 
-
         //Views
         $this->loadViewsFrom(__DIR__ . '/Views', 'footballdata');
 

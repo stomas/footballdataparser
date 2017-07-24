@@ -1,27 +1,59 @@
 <?php namespace Stomas\Footballdataparser;
 
 use Carbon\Carbon;
-use DateTime;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use League\Csv\Reader;
 
+/**
+ * Class CSVToModelTrait
+ *
+ * @package Stomas\Footballdataparser
+ */
 trait CSVToModelTrait {
 
+    /**
+     * @param $csvString
+     */
+    function addCsvToModel($csvString){
+        $csv = Reader::createFromString($csvString);
+
+        //Writing to model
+        $header = $csv->fetchOne();
+        $matches = $csv->setOffset(1)->fetchAll();
+
+        $model_class = get_class($this);
+
+        foreach($matches as $match){
+            (new $model_class)->getMatchWithCSVRow($header, $match);
+        }
+    }
+
+    /**
+     * @param array $csvHeaderArray
+     * @param array $csvRowArray
+     *
+     * @throws Exception
+     */
     function addCSVToModelAttributes(array $csvHeaderArray, array $csvRowArray){
         $columns = $this->getAllColumnsNames();
-        $start = microtime(true);
+
         for($i = 0; $i < count($csvHeaderArray); $i++) {
             //Modify attributes
             $csvHeaderArray[$i] = $this->modifyAttributeName($csvHeaderArray[$i]);
 
             $csvRowArray[$i] = $this->modifyValues($csvHeaderArray[$i], $csvRowArray[$i]);
 
-            if(isset($columns[$csvHeaderArray[$i]])){
+            if(isset($columns[$csvHeaderArray[$i]]) && $csvRowArray[$i] != null){
                 $this->{$csvHeaderArray[$i]} = $csvRowArray[$i];
             }
         }
     }
 
+    /**
+     * @param $attribute
+     *
+     * @return mixed
+     */
     private function modifyAttributeName($attribute){
         //Change > - over and < - under
         $attribute = str_replace('>', 'Over', $attribute);
@@ -33,14 +65,29 @@ trait CSVToModelTrait {
         return $attribute;
     }
 
+    /**
+     * @param $csvHeader
+     * @param $csvValue
+     *
+     * @return null|string
+     */
     private function modifyValues($csvHeader, $csvValue){
         if($this->modifyAttributeName($csvHeader) == 'Date'){
             $csvValue = $this->changeDateFormat($csvValue);
         }
 
+        if($csvValue == ''){
+            $csvValue = null;
+        }
+
         return $csvValue;
     }
 
+    /**
+     * @param $date
+     *
+     * @return string
+     */
     private function changeDateFormat($date){
         $carbonDate = Carbon::createFromFormat('d/m/y', $date);
         $carbonDate->format('Y-m-d');
@@ -48,6 +95,10 @@ trait CSVToModelTrait {
         return $carbonDate->toDateString();
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function getAllColumnsNames()
     {
         switch (DB::connection()->getConfig('driver')) {
