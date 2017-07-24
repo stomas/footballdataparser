@@ -37,7 +37,17 @@ class FootballDataController extends Controller
             $request->csvfile->storeAs('csv/', $request->csvfile->getClientOriginalName());
             $csvFile = Storage::get('csv/' . $request->csvfile->getClientOriginalName());
 
+<<<<<<< HEAD
+            foreach($matches as $match){
+
+// Execute the query
+
+                (new Match())->getMatchWithCSVRow($header, $match);
+
+            }
+=======
             (new Match())->parseCSV($csvFile);
+>>>>>>> a41647427a528a2590de050aa6a326d1a9a0367d
         }
 
         Session::flash('message', 'Thank you, your file was uploaded');
