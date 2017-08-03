@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Stomas\EloRanking\Elo;
+use Stomas\Footballdataparser\Jobs\GetELORating;
 use Stomas\Footballdataparser\Models\Match;
 
 /**
@@ -43,5 +45,19 @@ class FootballDataController extends Controller
         Session::flash('message', 'Thank you, your file was uploaded');
 
         return redirect('/footballdata');
+    }
+
+    /**
+     * Dispatch jobs for getting elos
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getElos(){
+        foreach(Match::all() as $match){
+            if($match->HomeTeamELO || $match->AwayTeamELO){
+                dispatch(new GetELORating($match));
+            }
+        }
+
+        return view('footballdata::index');
     }
 }
