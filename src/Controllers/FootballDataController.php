@@ -53,7 +53,8 @@ class FootballDataController extends Controller
      */
     public function getElos(){
         foreach(Match::all() as $match){
-            if($match->HomeTeamELO || $match->AwayTeamELO){
+
+            if(!$match->HomeTeamELO || !$match->AwayTeamELO){
                 dispatch(new GetELORating($match));
             }
         }

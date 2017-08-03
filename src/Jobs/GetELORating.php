@@ -32,7 +32,7 @@ class GetELORating implements ShouldQueue
      */
     public function handle()
     {
-        if($this->match->HomeTeamELO || $this->match->AwayTeamELO) {
+        if(!$this->match->HomeTeamELO || !$this->match->AwayTeamELO) {
             $this->match->HomeTeamELO = \Stomas\EloRanking\Elo::getElo($this->match->HomeTeam);
             $this->match->AwayTeamELO = \Stomas\EloRanking\Elo::getElo($this->match->AwayTeam);
             $this->match->save();
