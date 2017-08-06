@@ -51,7 +51,6 @@ class FootballDataController extends Controller
     }
 
     /**
-
      * Gets team and adds them to teams table.
      */
     public function getTeams()
@@ -97,7 +96,9 @@ class FootballDataController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getElos(){
+
         //TODO fix this
+
         foreach(Match::all() as $match){
 
             if(!$match->HomeTeamELO || !$match->AwayTeamELO){
