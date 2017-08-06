@@ -40,7 +40,6 @@ class FootballDataController extends Controller
             $request->csvfile->storeAs('csv/', $request->csvfile->getClientOriginalName());
             $csvFile = Storage::get('csv/' . $request->csvfile->getClientOriginalName());
 
-
             (new Match())->parseCSV($csvFile);
         }
 
@@ -87,5 +86,17 @@ class FootballDataController extends Controller
                 continue;
             }
         }
+
+     * Dispatch jobs for getting elos
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getElos(){
+        foreach(Match::all() as $match){
+
+            if(!$match->HomeTeamELO || !$match->AwayTeamELO){
+                dispatch(new GetELORating($match));
+            }
+        }
+        return view('footballdata::index');
     }
 }
