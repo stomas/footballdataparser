@@ -96,14 +96,21 @@ class FootballDataController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function getElos(){
-
-        //TODO fix this
-
         foreach(Match::all() as $match){
 
-            if(!$match->HomeTeamELO || !$match->AwayTeamELO){
-                dispatch(new GetELORating($match));
-            }
+                $homeTeam = Team::where('team', 'LIKE', "%".$match->HomeTeam."%")->first();
+                $awayTeam = Team::where('team', 'LIKE', "%".$match->AwayTeam."%")->first();
+
+                if($homeTeam){
+                    $match->HomeTeamELO = $homeTeam->elorating;
+                }
+
+                if($awayTeam){
+                    $match->AwayTeamELO = $awayTeam->elorating;
+                }
+
+                $match->save();
+
         }
 
         return view('footballdata::index');
