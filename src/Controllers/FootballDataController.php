@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 use Stomas\EloRanking\Elo;
-use Stomas\Footballdataparser\Jobs\GetELORating;
 use Stomas\Footballdataparser\Models\Match;
 use Stomas\Footballdataparser\Models\Team;
 

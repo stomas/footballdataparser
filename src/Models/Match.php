@@ -14,12 +14,16 @@ class Match extends Model
 
     use CSVToModelTrait;
 
+    public $eloDifference;
+
     /**
      *
      */
     function __construct()
     {
         $this->id = 0;
+
+        $this->eloDifference = $this->ELODIfference();
     }
 
     /**
@@ -111,4 +115,7 @@ class Match extends Model
 
         return $this->bettingOdds()->save($bettingOdds);
     }
+
+
+
 }
