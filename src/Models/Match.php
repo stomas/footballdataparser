@@ -22,8 +22,6 @@ class Match extends Model
     function __construct()
     {
         $this->id = 0;
-
-        $this->eloDifference = $this->ELODIfference();
     }
 
     /**
