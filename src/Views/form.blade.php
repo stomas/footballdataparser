@@ -1,9 +1,5 @@
 @extends('footballdata::layout')
 
-
-
-
-
 @section('content')
 @if(Session::has('message'))
 <section class="section">

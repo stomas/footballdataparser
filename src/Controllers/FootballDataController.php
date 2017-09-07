@@ -96,20 +96,20 @@ class FootballDataController extends Controller
      */
     public function getElos(){
         foreach(Match::all() as $match){
+                if($match->HomeTeamELO || $match->AwayTeamELO){
+                    $homeTeam = Team::search($match->HomeTeam)->get();
+                    $awayTeam = Team::search($match->AwayTeam)->get();
 
-                $homeTeam = Team::where('team', 'LIKE', "%".$match->HomeTeam."%")->get();
-                $awayTeam = Team::where('team', 'LIKE', "%".$match->AwayTeam."%")->get();
+                    if(count($homeTeam) >= 1){
+                        $match->HomeTeamELO = $homeTeam->first()->elorating;
+                    }
 
-                if(count($homeTeam) == 1){
-                    $match->HomeTeamELO = $homeTeam->first()->elorating;
+                    if(count($awayTeam) >= 1){
+                        $match->AwayTeamELO = $awayTeam->first()->elorating;
+                    }
+
+                    $match->save();
                 }
-
-                if(count($awayTeam) == 1){
-                    $match->AwayTeamELO = $awayTeam->first()->elorating;
-                }
-
-                $match->save();
-
         }
 
         return view('footballdata::index');

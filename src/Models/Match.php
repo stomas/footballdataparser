@@ -85,6 +85,7 @@ class Match extends Model
         }
 
         $this->save();
+
         return $this;
     }
 
