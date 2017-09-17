@@ -96,7 +96,9 @@ class FootballDataController extends Controller
      */
     public function getElos(){
         foreach(Match::all() as $match){
-                if($match->HomeTeamELO || $match->AwayTeamELO){
+
+            if($match->HomeTeamELO == null || $match->AwayTeamELO == null){
+
                     $homeTeam = Team::search($match->HomeTeam)->get();
                     $awayTeam = Team::search($match->AwayTeam)->get();
 
